@@ -1,10 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useEffect,useRef } from "react";
 import * as d3 from "d3";
-import { Button } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 const ChromeHistoryAnalysis = () => {
-  let force;
+  let force = useRef(null);
 
   useEffect(() => {
 
@@ -24,11 +23,11 @@ const ChromeHistoryAnalysis = () => {
       {source: "https://qiita.com/", target: "https://qiita.com/hamachi4708/items/bad21f0c6bf0a548e5bc"},
       // 以下略
     ];
-
+    const centerNodeURLs = ["https://github.com/", "https://tanaka.com/"];
     var nodes = {};
 
     links.forEach(function(link) {
-      link.source = nodes[link.source] || (nodes[link.source] = {name: link.source, domain: new URL(link.source).hostname});
+      link.source = nodes[link.source] || (nodes[link.source] = {name: link.source, domain: centerNodeURLs.includes(link.source) ? new URL(link.source).hostname : null});
       link.target = nodes[link.target] || (nodes[link.target] = {name: link.target});
     });
 
@@ -47,7 +46,9 @@ const ChromeHistoryAnalysis = () => {
     var link = svg.selectAll(".link")
       .data(links)
       .enter().append("line")
-      .attr("class", "link");
+      .attr("class", "link")
+      .style("stroke", "#999")  // リンクの色を設定
+      .style("stroke-opacity", 0.6);  // リンクの透明度を設定
 
     var node = svg.selectAll(".node")
       .data(force.nodes())
@@ -94,9 +95,13 @@ const ChromeHistoryAnalysis = () => {
       node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
     });
 
-    
+    force.current = d3.forceSimulation(Object.values(nodes))
+    .force("link", d3.forceLink(links).id(d => d.name).distance(60))
+    .force("charge", d3.forceManyBody().strength(-10))
+    .force("center", d3.forceCenter(width / 2, height / 2));
+
     function dragstarted(event, d) {
-      if (!event.active) force.alphaTarget(0.3).restart();
+      if (!event.active) force.alpha(1).restart();
       d.fx = d.x;
       d.fy = d.y;
     }
@@ -107,7 +112,7 @@ const ChromeHistoryAnalysis = () => {
     }
 
     function dragended(event, d) {
-      if (!event.active) force.alphaTarget(0);
+      if (!event.active) force.alpha(1).restart();
       d.fx = null;
       d.fy = null;
     }
@@ -120,10 +125,7 @@ const ChromeHistoryAnalysis = () => {
 }, []);
 
 
-  const centerNodes = () => {
-    force.force("center", d3.forceCenter(window.innerWidth / 2, window.innerHeight / 2));
-    force.alpha(0.3).restart();
-  };
+
 
   return (
     <div className="container">
