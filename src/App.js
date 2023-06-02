@@ -1,9 +1,10 @@
 import './App.css';
+import  ChromeHistoryAnalysis from './ChromeHistoryAnalysis.jsx';
 
 function App() {
   return (
-    <div>
-      <chrome_history />
+    <div className='App'>
+      <ChromeHistoryAnalysis />
 
     </div>
   );
