@@ -25,9 +25,10 @@ const ChromeHistoryAnalysis = () => {
       var nodes = {};
 
       links.forEach(function (link) {
-        link.source = nodes[link.source] || (nodes[link.source] = { name: link.source, domain: centerNodeURLs.includes(link.source) ? new URL(link.source).hostname : null });
+        link.source = nodes[link.source] || (nodes[link.source] = { name: link.source, domain: new URL(link.source).hostname });
         link.target = nodes[link.target] || (nodes[link.target] = { name: link.target });
       });
+      
 
       var width = 1400, height = 800;
 
@@ -60,24 +61,18 @@ const ChromeHistoryAnalysis = () => {
 
       node.append("circle")
         .attr("r", function (d) {
-          // もしノードがドメイン名のノードであれば半径を大きくする
-          if (d.name === d.domain) {
-            return 10;
-          } else {
-            return 5;
-          }
+          return d.domain ? 10 : 5;
+        })
+        .style("fill", function(d) {
+          return d.domain ? "red" : "blue";
         });
+        
 
       node.append("text")
         .attr("dx", 12)
         .attr("dy", ".35em")
         .text(function (d) {
-          // もしノードがドメイン名のノードであればドメイン名を表示する
-          if (d.name === d.domain) {
-            return d.domain;
-          } else {
-            return d.name;
-          }
+          return d.domain || d.name;
         });
 
       node.on("click", function (event, d) {
