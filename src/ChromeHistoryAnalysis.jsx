@@ -69,7 +69,7 @@ const [isSidebarOpen, setSidebarOpen] = useState(false);
           return d.domain ? 10 : 5;
         })
         .style("fill", function(d) {
-          return d.domain ? "red" : "blue";
+          return d.domain ? "white" : "blue";
         });
         
 
@@ -83,6 +83,18 @@ const [isSidebarOpen, setSidebarOpen] = useState(false);
       node.on("click", function (event, d) {
         // ノードがクリックされたときにそのURLを新しいタブで開く
         window.open(d.name, '_blank');
+      });
+
+
+      // ソースノードのファビコンを取得して表示する
+      node.filter(function(d) { return d.domain; }).each(function(d) {
+        const faviconURL = `https://www.google.com/s2/favicons?domain=${d.name}`;
+        d3.select(this).append("image")
+          .attr("xlink:href", faviconURL)
+          .attr("x", -8)
+          .attr("y", -8)
+          .attr("width", 16)
+          .attr("height", 16);
       });
 
       function dragstarted(event, d) {
