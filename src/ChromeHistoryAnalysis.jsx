@@ -1,9 +1,14 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef ,useState} from "react";
 import * as d3 from "d3";
+import Sidebar from "./Sidebar.jsx";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 const ChromeHistoryAnalysis = () => {
   let force = useRef(null);
+  const [selectedNode, setSelectedNode] = useState(null);
+
+// サイドバーの状態を管理するためのステートを追加
+const [isSidebarOpen, setSidebarOpen] = useState(false);
 
   useEffect(() => {
     const graph_get = () => {
@@ -84,6 +89,21 @@ const ChromeHistoryAnalysis = () => {
         if (!event.active) force.current.alphaTarget(0.3).restart();
         d.fx = d.x;
         d.fy = d.y;
+
+        if (d) {
+          const children = links
+            .filter(link => link.source.name === d.name)
+            .map(link => link.target.name)
+            .sort();
+        
+          setSelectedNode({
+            name: d.domain || d.name,
+            children: children
+          });
+
+          setSidebarOpen(true);
+        }
+        
       }
 
       function dragged(event, d) {
@@ -112,20 +132,26 @@ const ChromeHistoryAnalysis = () => {
   }, []);
 
   return (
-    <div className="container">
-      <div className="row justify-content-center">
-        <div className="col-12 text-center">
-          <h1>Chrome History Analysis</h1>
-        </div>
+    <div className="d-flex">
+      <div className={`sidebar ${isSidebarOpen ? 'open' : ''}`}>
+        <Sidebar selectedNode={selectedNode} />
       </div>
-      <div className="row justify-content-center">
-        <div className="col-12">
-          {/*<Button id="centerButton" className="btn btn-primary" onClick={centerNodes}>Center Nodes</Button> */}
+      <div className="container">
+        <div className="row justify-content-center">
+          <div className="col-12 text-center">
+            <h1>Chrome History Analysis</h1>
+          </div>
         </div>
+        <div className="row justify-content-center">
+          <div className="col-12">
+            {/*<Button id="centerButton" className="btn btn-primary" onClick={centerNodes}>Center Nodes</Button> */}
+          </div>
+        </div>
+        <div id="graph"></div>
       </div>
-      <div id="graph"></div>
     </div>
   );
+  
 };
 
 export default ChromeHistoryAnalysis;
