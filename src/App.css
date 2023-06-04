@@ -1,33 +1,17 @@
-/*.sidebar {
-    width: 0;
-    height: 120vh;
-    background-color: #000;
-    color: #fff;
-    padding: 20px;
-    transition: width 0.3s ease-out;
-  }
-  
-  .sidebar.open {
-    width: 400px;
-  }
-  
-  .container {
-    width: calc(100% - 300px);
-  }
-  
-*/
-
+/*
 .sidebar {
     width: 0;
     height: 100vh;
     background-color: #000;
     color: #fff;
     padding: 0px;
+
+    white-space: nowrap;
     
     overflow: visible;
     transition: width 0.3s ease-out;
-    position: absolute;  /* positionをabsoluteに設定 */
-    z-index: -1000;  /* z-indexを設定 */
+    position: absolute; 
+    z-index: -1000;  
 }
   
 .sidebar.open {
@@ -39,4 +23,26 @@
 .container {
     width: calc(100% - 400px);
     transition: width 0.3s ease-out;
+}
+
+*/
+
+.sidebar {
+  width: 0;
+  height: 100vh;
+  background-color: #000;
+  color: #fff;
+  padding: 0px;
+  /*折り返し無効*/
+  white-space: nowrap;
+  overflow: hidden; /* overflowをhiddenに設定 */
+  transition: width 0.3s ease-out, padding 0.3s ease-out; /* paddingの遷移も追加 */
+  position: absolute;  /* positionをabsoluteに設定 */
+  z-index: 0;  /* z-indexを0に設定 */
+}
+
+.sidebar.open {
+  width: 400px;
+  z-index: 100;
+  padding: 20px;
 }

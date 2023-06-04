@@ -13,25 +13,25 @@ const [isSidebarOpen, setSidebarOpen] = useState(false);
   useEffect(() => {
     const graph_get = () => {
       var links = [
-        { source: "https://github.com/", target: "https://github.com/t-nakatani/GeekCamp/issues/2" },
-        { source: "https://github.com/", target: "https://github.com/GeekCamp/issues/2" },
-        { source: "https://github.com/", target: "https://github.com/issues/2" },
-        { source: "https://github.com/", target: "https://github.com/issues" },
-        { source: "https://github.com/", target: "https://github.com/" },
-        { source: "https://tanaka.com/", target: "https://tanaka.com/" },
-        { source: "https://tanaka.com/", target: "https://tanaka.com/tanaka" },
-        { source: "https://yamada.com/", target: "https://yamada.com/" },
-        { source: "https://react.dev/", target: "https://react.dev/" },
-        { source: "https://qiita.com/", target: "https://qiita.com/jimpei/items/eb09f4af122198952ffd" },
-        { source: "https://qiita.com/", target: "https://qiita.com/hamachi4708/items/bad21f0c6bf0a548e5bc" },
+        { source: "https://github.com/", target: "https://github.com/t-nakatani/GeekCamp/issues/2" , title:"t-nakatani GeekCamp"},
+        { source: "https://github.com/", target: "https://github.com/GeekCamp/issues/2" , title:"GeekCamp issues"},
+        { source: "https://github.com/", target: "https://github.com/issues/2" ,title:"github issue2"},
+        { source: "https://github.com/", target: "https://github.com/issues" ,title:"github issue"},
+        { source: "https://github.com/", target: "https://github.com/" ,title:"github"},
+        { source: "https://tanaka.com/", target: "https://tanaka.com/" ,title:"tanaka"},
+        { source: "https://tanaka.com/", target: "https://tanaka.com/tanaka" ,title:"tanaka-tanaka"},
+        { source: "https://yamada.com/", target: "https://yamada.com/" ,title:"yamada"},
+        { source: "https://react.dev/", target: "https://react.dev/" ,title:"react"},
+        { source: "https://qiita.com/", target: "https://qiita.com/jimpei/items/eb09f4af122198952ffd" ,title:"chromeの検索履歴を検索して一括削除するchrome拡張を作る"},
+        { source: "https://qiita.com/", target: "https://qiita.com/hamachi4708/items/bad21f0c6bf0a548e5bc" ,title:"Chrome拡張開発 Getting Started（React×Webpackのボイラープレートを利用した場合）"},
         // 以下略
       ];
-      const centerNodeURLs = ["https://github.com/", "https://tanaka.com/"];
+      //const centerNodeURLs = ["https://github.com/", "https://tanaka.com/"];
       var nodes = {};
 
       links.forEach(function (link) {
         link.source = nodes[link.source] || (nodes[link.source] = { name: link.source, domain: new URL(link.source).hostname });
-        link.target = nodes[link.target] || (nodes[link.target] = { name: link.target });
+        link.target = nodes[link.target] || (nodes[link.target] = { name: link.target , title: link.title});
       });
       
 
@@ -77,7 +77,8 @@ const [isSidebarOpen, setSidebarOpen] = useState(false);
         .attr("dx", 12)
         .attr("dy", ".35em")
         .text(function (d) {
-          return d.domain || d.name;
+          //return d.domain || d.name;
+          return d.domain ? d.domain || d.name : d.title;
         });
 
       node.on("click", function (event, d) {
@@ -96,12 +97,13 @@ const [isSidebarOpen, setSidebarOpen] = useState(false);
           .attr("width", 16)
           .attr("height", 16);
       });
-
+/*
       function dragstarted(event, d) {
         if (!event.active) force.current.alphaTarget(0.3).restart();
         d.fx = d.x;
         d.fy = d.y;
 
+        
         if (d) {
           const children = links
             .filter(link => link.source.name === d.name)
@@ -116,7 +118,34 @@ const [isSidebarOpen, setSidebarOpen] = useState(false);
           setSidebarOpen(true);
         }
         
+
+
+        
       }
+
+      */
+
+      function dragstarted(event, d) {
+        if (!event.active) force.current.alphaTarget(0.3).restart();
+        d.fx = d.x;
+        d.fy = d.y;
+        if (d) {
+          const children = links
+            .filter(link => link.source.name === d.name)
+            .map(link => ({ url: link.target.name, title: link.target.title }))
+            .sort((a, b) => a.url.localeCompare(b.url));
+      
+          setSelectedNode({
+            name: d.domain || d.name,
+            children: children
+          });
+      
+          setSidebarOpen(true);
+        }
+      }
+      
+
+
 
       function dragged(event, d) {
         d.fx = event.x;
