@@ -69,7 +69,7 @@ const [isSidebarOpen, setSidebarOpen] = useState(false);
           return d.domain ? 10 : 5;
         })
         .style("fill", function(d) {
-          return d.domain ? "white" : "blue";
+          return d.domain ? "rgb(175,238,238)" : "rgb(175,238,238)";
         });
         
 
@@ -79,7 +79,11 @@ const [isSidebarOpen, setSidebarOpen] = useState(false);
         .text(function (d) {
           //return d.domain || d.name;
           return d.domain ? d.domain || d.name : d.title;
-        });
+        })
+        .style("fill", "rgb(175,238,238)") // 文字の色を赤にする
+        .style("font-size", "20px"); // 文字の大きさを20pxにする
+
+        
 
       node.on("click", function (event, d) {
         // ノードがクリックされたときにそのURLを新しいタブで開く
@@ -180,7 +184,7 @@ const [isSidebarOpen, setSidebarOpen] = useState(false);
       <div className="container">
         <div className="row justify-content-center">
           <div className="col-12 text-center">
-            <h1>Chrome History Analysis</h1>
+            <h1 className="title">Chrome History Analysis</h1>
           </div>
         </div>
         <div className="row justify-content-center">

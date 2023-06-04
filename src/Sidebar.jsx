@@ -17,7 +17,7 @@ const Sidebar = ({ selectedNode }) => {
   const urlStyle = {
     overflow: 'hidden',
     textOverflow: 'ellipsis',
-    fontSize: '14px',  /* URLのフォントサイズを指定 */
+    fontSize: '9px',  /* URLのフォントサイズを指定 */
   };
 
   return (

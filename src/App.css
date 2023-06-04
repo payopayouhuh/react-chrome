@@ -31,7 +31,11 @@
   width: 0;
   height: 100vh;
   background-color: #000;
-  color: #fff;
+
+  border-radius: 10px; /* 丸みを帯びたボーダー */
+  box-shadow: 10px 0px 40px rgba(0, 0, 0, 0.25);
+  transition: all 0.3s ease-in-out; /* スムーズな遷移 */
+  color: #78cae8;
   padding: 0px;
   /*折り返し無効*/
   white-space: nowrap;
@@ -45,4 +49,12 @@
   width: 400px;
   z-index: 100;
   padding: 20px;
+}
+
+
+.title {
+  color: rgb(106, 191, 243);
+  font-family: 'Roboto', sans-serif; /* Google FontsからRobotoを選択 */
+  font-size: 2.5rem; /* フォントサイズの調整 */
+  margin-top: 50px; /* タイトルの位置を下に調整 */
 }
