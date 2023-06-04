@@ -3,6 +3,7 @@ import * as d3 from "d3";
 import Sidebar from "./Sidebar.jsx";
 import "bootstrap/dist/css/bootstrap.min.css";
 
+
 const ChromeHistoryAnalysis = () => {
   let force = useRef(null);
   const [selectedNode, setSelectedNode] = useState(null);
@@ -183,7 +184,9 @@ const [isSidebarOpen, setSidebarOpen] = useState(false);
       </div>
       <div className="container">
         <div className="row justify-content-center">
-          <div className="col-12 text-center">
+          <div className="header-container">
+
+            <img src="/logo2.svg" className="spin" alt="logo" style={{ width: '50px', height: '50px' }} />
             <h1 className="title">Chrome History Analysis</h1>
           </div>
         </div>

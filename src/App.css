@@ -58,3 +58,19 @@
   font-size: 2.5rem; /* フォントサイズの調整 */
   margin-top: 50px; /* タイトルの位置を下に調整 */
 }
+
+@keyframes spin {
+  from {transform:rotate(0deg);}
+  to {transform:rotate(360deg);}
+}
+
+.spin {
+  animation: spin 4s linear infinite;
+  margin-right: 10px;
+}
+
+.header-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
